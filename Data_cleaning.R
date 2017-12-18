@@ -143,7 +143,7 @@ datin$SeasonName = na.omit(unlist(strsplit(datin$SeasonName, "[^A-B]+" , fixed =
     
 
     #print(colnames(datin))
-    fvrdat_slim = unique(data.frame("SeasonName" = datin$SeasonName, "DistrictName" = datin$DistrictID, "GroupName" = datin$GroupID, "SiteName" = datin$SiteID, "HasSolar" = datin$SolarAdoption, "N_repayments" = datin$NrOfPayments, "average_amount" = datin$AverageGroupPayment, "sum_rep_cut"=datin$s , "sd_amount" = datin$StdGroupPayment, "last_date" = datin$maxdate, "first_date" = datin$mindate))
+    fvrdat_slim = unique(data.frame("SeasonName" = datin$SeasonName, "DistrictName" = datin$DistrictID, "GroupName" = datin$GroupID, "SiteName" = datin$SiteID, "HasSolar" = datin$SolarAdoption, "N_repayments" = datin$NrOfPayments, "average_amount" = datin$AverageGroupPayment, "sum_rep_cut"=datin$sumrepcut , "sd_amount" = datin$StdGroupPayment, "last_date" = datin$maxdate, "first_date" = datin$mindate))
 
  
     fscdat = unique( data.frame("ClientID" = datin$ClientID, "TotalRepayment" = datin$TotalRepayment, "TotalCredit" = datin$TotalCredit, "LandSize" = datin$LandSize, "NewMember" = datin$NewMember, "TotalEnrolledSeasons" = datin$TotalEnrolledSeasons, "SeasonName" = datin$SeasonName, "GlobalClientID" = datin$GlobalClientID, "DistrictName" = datin$DistrictID, "SiteName" = datin$SiteID, "GroupName" = datin$GroupID, "Facilitator" = datin$Facilitator) )
