@@ -5,7 +5,7 @@ BEGIN
 EXEC sp_execute_external_script 
 	@language = N'R'
     , @script = N'source("C:/R_default/Data_cleaning.R");
-	datout <- process_data(InputDataSet, fakedate="2017-06-06");
+	datout <- process_data(InputDataSet);
 	d2018 <- datout[[length(datout)]];
 	print(head(d2018,2));
 	datout[[as.integer(format(Sys.Date(), "%Y")) + 1]] <- NULL;
