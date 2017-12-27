@@ -1,6 +1,6 @@
 # One Acre Fund predictive model 
 
-Production-ready model generating probabilities that *groups* of farmers will default on their loans by the repayment deadline. 
+Production-ready machine-learning model that generates probabilities for loan-default events for *groups* of farmers (i.e. the probability of group-level default by the repayment deadline). 
 
 ## A note about SQL-R
 
@@ -12,20 +12,20 @@ The stored procedure takes the following form:
 
 This approach has a few "features" associated with it:
 
-* Joins within the SP result in a fail - therefore a view is made, and the SP merely calls part of that view. 
+* Joins within the SP result in a fail - therefore a view is made, and the SP merely calls part of that view.
 * Microsoft's SP is *much* slower than using a connection string within R (e.g. via RODBC package).
-* The pre-SP version is [here](https://github.com/Michael-Bar/OAF-predicting-defaults-prototype).
+* The pre-SP version is [here](https://github.com/Michael-Bar/Credit_scoring_farmers-prototype).
 
 
 ## Overview
 
-A group-level default event is defined as any single client within a lending circle defaulting on their loan at the repayment deadline (OAF provides loans without repayment plans and with just a single repayment due date, so "days-past-due" etc. are not applicable here). If a single member of a group defaults, then her entire group (6-12 members) is black-listed for subsequent seasons. This has significant implications for client growth. The aim of this model is to identify groups at risk of default, and flag them for action from OAF loan officers and/or call centres.
+A group-level default event is defined as any single client within a lending circle defaulting on their loan at the repayment deadline (OAF provides loans without repayment plans and with just a single due date, so "days-past-due" etc. is not applicable here). If a single member of a group defaults, then her entire group (6-12 members) is black-listed for subsequent seasons. This has significant implications for client growth. The aim of this model is to identify groups at risk of default, and flag them for action from OAF loan officers and/or call centres.
 
 The prototype model is currently in action across Kenya, Rwanda and Tanzania, representing >85% of our clients. Model scoring yields a cross-validation AUC score of 0.9 - 0.95 (depending on the country). 
 
 ## Breakdown of model
 
-The model can be broken down into 3 (automated) stages, data cleaning, model building and finally predictions. 
+The model can be broken down into 3 (automated) stages, data cleaning, model building and prediction. 
 
 ### Data cleaning
 
@@ -37,7 +37,7 @@ Data are first cleaned and then summarized at the group level, this is also wher
 
 ### Model building
 
-With clean data we can start model building and testing. First there are options for recursive-feature extraction and model stability checks (which increase runtime). Once these checks are complete a small RF is grown and nodesize and mtry optimized for minimal OOB error (a mixed gradient descent and grid-search approach):
+With clean data we can start model building and testing. First there are options for recursive-feature extraction and model stability checks (which increase runtime, so are disabled in the SP). Once these checks are complete a small RF is grown and nodesize and mtry optimized for minimal OOB error (a mixture of gradient descent and grid-search methods):
 
 ![Model tuning](https://user-images.githubusercontent.com/26271235/30958758-c4ba3dc4-a446-11e7-9f43-abdd30a22384.png)
 
@@ -62,8 +62,9 @@ And some partial-dependency plots:
 
 <img src="https://user-images.githubusercontent.com/26271235/30958759-c4bab754-a446-11e7-9ce1-4f90c628cd2e.png" width="500" height="300">
 
+### Prediction
 
-The last part of the process involves applying the model to cleaned data from the current year. These predictions are then shared with loan officers and call centre staff for follow up
+The last part of the process involves applying the model to cleaned data from the current year. These predictions are then shared with loan officers and call centre staff for follow up.
 
 ## Planned updates
 
@@ -71,3 +72,4 @@ The last part of the process involves applying the model to cleaned data from th
 * Individual level predictions
 * Hybrid approach combining predictions of final % repaid with default probability
 * Default hotspot mapping for decision making
+* SQL query optimisation
